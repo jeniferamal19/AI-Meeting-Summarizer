@@ -7,8 +7,8 @@ function getInitials(name) {
 
 export default function ActionItems({ items = [] }) {
   return (
-    <section className="card">
-      <h3 className="card__heading">Action items</h3>
+    <section className="card card--actions">
+      <h2 className="card__heading">Action items</h2>
       {items.length === 0 ? (
         <p className="empty-note">No action items were detected in this meeting.</p>
       ) : (

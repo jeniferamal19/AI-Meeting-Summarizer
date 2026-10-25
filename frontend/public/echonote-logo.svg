@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 40" fill="none">
+  <path d="M20 2.5 36.45 12v16L20 37.5 3.55 28V12L20 2.5Z" stroke="#fff" stroke-width="1.7"/>
+  <path d="M11 22v-4m6 7V15m6 12V13m6 10v-6" stroke="#2F6BFF" stroke-linecap="round" stroke-width="2.4"/>
+  <text x="48" y="27" fill="#fff" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600" letter-spacing="-1">Echo</text>
+  <text x="102" y="27" fill="#2F6BFF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600" letter-spacing="-1">Note</text>
+</svg>

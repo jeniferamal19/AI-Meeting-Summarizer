@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --canvas: #050b1f;
+      --canvas-raised: #0a1a4a;
+      --glass: rgba(255, 255, 255, 0.055);
+      --glass-border: rgba(255, 255, 255, 0.11);
+      --text: #fff;
+      --text-body: rgba(255, 255, 255, 0.72);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --blue: #2f6bff;
+      --blue-hover: #4b7eff;
+      --red: #ff6257;
+      --radius: 16px;
+      font-family: Inter, "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      width: 360px;
+      min-height: 400px;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 92% 0%, rgba(47, 107, 255, 0.22), transparent 45%),
+        linear-gradient(150deg, var(--canvas-raised), var(--canvas) 62%);
+      color: var(--text);
+    }
+
+    button { font: inherit; }
+
+    .popup {
+      display: flex;
+      min-height: 400px;
+      flex-direction: column;
+      padding: 18px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 17px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    .brand__mark {
+      width: 31px;
+      height: 31px;
+      color: #fff;
+    }
+
+    .brand__mark-accent { stroke: #79a0ff; }
+
+    .brand__live {
+      margin-left: 1px;
+      color: #9cb7ff;
+      font-weight: 500;
+    }
+
+    .connection {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #8290aa;
+      box-shadow: 0 0 0 3px rgba(130, 144, 170, 0.12);
+    }
+
+    .status-dot.recording {
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(255, 98, 87, 0.16), 0 0 14px rgba(255, 98, 87, 0.55);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    .intro {
+      padding: 20px 1px 17px;
+    }
+
+    .eyebrow {
+      margin-bottom: 7px;
+      color: #9cb7ff;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 620;
+      letter-spacing: -0.045em;
+      line-height: 1.18;
+    }
+
+    .intro p:last-child {
+      margin-top: 7px;
+      color: var(--text-body);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .controls {
+      display: grid;
+      gap: 9px;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 43px;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    }
+
+    .btn[hidden] { display: none; }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+
+    .btn:focus-visible {
+      outline: 2px solid #8eb0ff;
+      outline-offset: 3px;
+    }
+
+    .btn-start {
+      border-color: rgba(139, 169, 255, 0.24);
+      background: linear-gradient(135deg, var(--blue), #2452db);
+      box-shadow: 0 8px 22px rgba(30, 79, 255, 0.22);
+      color: #fff;
+    }
+
+    .btn-start:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--blue-hover), var(--blue));
+      box-shadow: 0 10px 28px rgba(30, 79, 255, 0.3);
+    }
+
+    .btn-stop {
+      border-color: rgba(255, 98, 87, 0.26);
+      background: rgba(255, 98, 87, 0.12);
+      color: #ffb4ad;
+    }
+
+    .btn-stop:hover:not(:disabled) { background: rgba(255, 98, 87, 0.2); }
+
+    .btn-summarize {
+      border-color: var(--glass-border);
+      background: var(--glass);
+      color: var(--text-body);
+    }
+
+    .btn-summarize:hover:not(:disabled) {
+      border-color: rgba(139, 169, 255, 0.32);
+      background: rgba(47, 107, 255, 0.12);
+      color: var(--text);
+    }
+
+    .btn-summarize:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+    }
+
+    .btn__icon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .transcript {
+      display: flex;
+      min-height: 170px;
+      flex: 1;
+      flex-direction: column;
+      margin-top: 17px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      background: rgba(2, 7, 20, 0.32);
+    }
+
+    .transcript__header {
+      display: flex;
+      min-height: 40px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+    }
+
+    .transcript__title {
+      color: var(--text-body);
+      font-size: 11px;
+      font-weight: 550;
+    }
+
+    .transcript__count {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .transcript-box {
+      min-height: 128px;
+      padding: 11px 13px;
+      overflow-y: auto;
+      color: var(--text-body);
+      font-size: 11px;
+      line-height: 1.6;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+      scrollbar-width: thin;
+    }
+
+    .transcript-box p { margin: 0 0 8px; }
+    .transcript-box p:last-child { margin-bottom: 0; }
+
+    .empty-state {
+      display: grid;
+      min-height: 104px;
+      place-content: center;
+      justify-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty-state__icon {
+      width: 22px;
+      height: 22px;
+      color: #789bff;
+      opacity: 0.9;
+    }
+
+    .empty-state span { max-width: 220px; }
+
+    .timer {
+      min-height: 16px;
+      padding-top: 9px;
+      color: #ffb4ad;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.48; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="popup">
+    <header class="header">
+      <div class="brand">
+        <svg class="brand__mark" viewBox="0 0 36 36" role="img" aria-label="EchoNote">
+          <path d="M18 3.5 30.55 10.75v14.5L18 32.5 5.45 25.25v-14.5L18 3.5Z" fill="none" stroke="currentColor" stroke-width="1.7" />
+          <path class="brand__mark-accent" d="M11 19.8v-3.6m4 6.2V13.6m4 10.1V12.3m4 8.4v-5.8" fill="none" stroke-linecap="round" stroke-width="2.2" />
+        </svg>
+        <span>EchoNote <span class="brand__live">Live</span></span>
+      </div>
+      <div class="connection" aria-live="polite">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="connectionLabel">Ready</span>
+      </div>
+    </header>
+
+    <section class="intro" aria-labelledby="popup-title">
+      <p class="eyebrow">Meeting companion</p>
+      <h1 id="popup-title">Keep the important parts.</h1>
+      <p>Capture a live transcript, then bring it into EchoNote for a clear summary.</p>
+    </section>
+
+    <div class="controls">
+      <button class="btn btn-start" id="startBtn" type="button">
+        <svg class="btn__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.7" /><path d="m8 6.8 5 3.2-5 3.2z" fill="currentColor" /></svg>
+        Start recording
+      </button>
+      <button class="btn btn-stop" id="stopBtn" type="button" hidden>
+        <svg class="btn__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.7" /><rect x="7" y="7" width="6" height="6" rx="1" fill="currentColor" /></svg>
+        Stop recording
+      </button>
+      <button class="btn btn-summarize" id="summarizeBtn" type="button" disabled>
+        <svg class="btn__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m10 2 1.8 5.1L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.9L10 2Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.4" /><path d="m15.4 13 .9 2.4 2.2.8-2.2.8-.9 2.2-.8-2.2-2.3-.8 2.3-.8.8-2.4Z" fill="currentColor" /></svg>
+        Open summary in EchoNote
+      </button>
+    </div>
+
+    <section class="transcript" aria-label="Live transcript">
+      <div class="transcript__header">
+        <span class="transcript__title">Live transcript</span>
+        <span class="transcript__count" id="transcriptCount" aria-live="polite">No speech yet</span>
+      </div>
+      <div class="transcript-box" id="transcriptBox">
+        <div class="empty-state">
+          <svg class="empty-state__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M8.5 7v10M5 9.5v5m10.5-7.5v11M19 9.5v5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.6" /></svg>
+          <span>Start a recording to see the conversation appear here.</span>
+        </div>
+      </div>
+    </section>
+    <div class="timer" id="timer" aria-live="polite"></div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

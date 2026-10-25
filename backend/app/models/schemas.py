@@ -27,3 +27,8 @@ class ProcessResponse(BaseModel):
     transcript: str
     summary: MeetingSummary
     speaker_transcript: List[SpeakerTurn] = []
+
+
+class FollowUpEmail(BaseModel):
+    subject: str
+    body: str

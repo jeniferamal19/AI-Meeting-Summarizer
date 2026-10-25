@@ -2,8 +2,8 @@ export default function SpeakerTranscript({ turns = [] }) {
   if (turns.length === 0) return null;
 
   return (
-    <section className="card">
-      <h3 className="card__heading">Speaker transcript</h3>
+    <section className="card card--speakers">
+      <h2 className="card__heading">Speaker transcript</h2>
       <div className="speaker-transcript">
         {turns.map((turn, i) => (
           <div key={i} className="speaker-turn">

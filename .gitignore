@@ -16,3 +16,14 @@ node_modules/
 
 # Uploaded audio/files
 backend/uploads/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+backend/meetings.db
+# Build output
+dist/
+dist-ssr/

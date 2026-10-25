@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "EchoNote Live",
+  "version": "1.0",
+  "description": "Live meeting transcription for Google Meet, Zoom and Teams",
+  "permissions": [
+    "tabCapture",
+    "activeTab",
+    "scripting",
+    "storage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "EchoNote Live"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:5173/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

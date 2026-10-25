@@ -2,8 +2,8 @@ import { AlertTriangle } from "lucide-react";
 
 export default function RisksBlockers({ items = [] }) {
   return (
-    <section className="card">
-      <h3 className="card__heading">Risks &amp; blockers</h3>
+    <section className="card card--risks">
+      <h2 className="card__heading">Risks &amp; blockers</h2>
       {items.length === 0 ? (
         <p className="empty-note">No risks or blockers were flagged in this meeting.</p>
       ) : (

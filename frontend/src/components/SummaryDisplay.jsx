@@ -9,13 +9,13 @@ export default function SummaryDisplay({ summary, transcript }) {
 
   return (
     <>
-      <section className="card">
+      <section className="card card--overview">
         <p className="card__eyebrow">Overview</p>
         <p className="summary-text">{summary?.summary || "No summary was returned."}</p>
       </section>
 
-      <section className="card">
-        <h3 className="card__heading">Key decisions</h3>
+      <section className="card card--decisions">
+        <h2 className="card__heading">Key decisions</h2>
         {decisions.length > 0 ? (
           <ul className="decision-list">
             {decisions.map((decision, i) => (
@@ -32,8 +32,8 @@ export default function SummaryDisplay({ summary, transcript }) {
         )}
       </section>
 
-      <section className="card">
-        <h3 className="card__heading">Topics discussed</h3>
+      <section className="card card--topics">
+        <h2 className="card__heading">Topics discussed</h2>
         {topics.length > 0 ? (
           <div className="topic-pills">
             {topics.map((topic, i) => (
@@ -48,7 +48,7 @@ export default function SummaryDisplay({ summary, transcript }) {
       </section>
 
       {transcript && (
-        <section className="card">
+        <section className="card card--transcript">
           <button
             type="button"
             className="transcript-toggle"
